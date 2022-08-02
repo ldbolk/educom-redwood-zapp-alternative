@@ -10,6 +10,11 @@ export const QUERY = gql`
       woonplaats
       taken{id, taak, extra}
     }
+    taken: taaks {
+      id
+      taak
+      extra
+    }
   }
 `
 
@@ -21,6 +26,6 @@ export const Failure = ({ error }) => (
   <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({ klant }) => {
-  return <Klant klant={klant} />
+export const Success = ({ klant, taken }) => {
+  return <Klant klant={klant} taken={taken} />
 }

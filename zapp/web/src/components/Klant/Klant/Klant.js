@@ -54,34 +54,31 @@ const checkboxInputTag = (checked) => {
   return <input type="checkbox" checked={checked} disabled />
 }
 
-const Klant = ({ klant }) => {
-  const [deleteKlant] = useMutation(DELETE_KLANT_MUTATION, {
-    onCompleted: () => {
-      toast.success('Klant deleted')
-      navigate(routes.klants())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
-
-  const onDeleteClick = (id) => {
-    if (confirm('Are you sure you want to delete klant ' + id + '?')) {
-      deleteKlant({ variables: { id } })
+const Klant = ({ klant, taken }) => {
+    console.log(taken)
+    const [deleteKlant] = useMutation(DELETE_KLANT_MUTATION, {
+      onCompleted: () => {
+        toast.success('Klant deleted')
+        navigate(routes.klants())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    })
+    
+    const onDeleteClick = (id) => {
+      if (confirm('Are you sure you want to delete klant ' + id + '?')) {
+        deleteKlant({ variables: { id } })
+      }
     }
-  }
-  console.log(klant.taken)
-
-  let takenList = [];
-  var selectBox = document.getElementById('selectTaak');
-  for(let i = 0; i < klant.taken.length; i++) {
-    var option = klant.taken[i];
-    console.log(selectBox.options)
-    selectBox.options.add( new Option(option.naam, option.id))
-    takenList.push(klant.taken[i].taak)
-    console.log(takenList);
-  }
-
+    
+    // var selectBox = document.getElementById('select_Taak');
+    // for(let i = 0; i < klant.taken.length; i++) {
+      //   var option = klant.taken[i];
+      //   console.log(selectBox)
+      //   selectBox.options.add( new Option(option.naam, option.id))
+  // }
+  
   return (
     <>
       <div className="rw-segment">
@@ -126,7 +123,7 @@ const Klant = ({ klant }) => {
         <Link
           to={routes.editKlant({ id: klant.id })}
           className="rw-button rw-button-blue"
-        >
+          >
           Edit
         </Link>
 
@@ -177,7 +174,7 @@ const Klant = ({ klant }) => {
                     title={'Delete taak ' + taak.id}
                     className="rw-button rw-button-small rw-button-red"
                     onClick={() => onDeleteClick(taak.id)}
-                  >
+                    >
                     Delete
                   </button>
                 </nav>
@@ -186,8 +183,13 @@ const Klant = ({ klant }) => {
           ))}
           <tr>
             <td>nummer</td>
-            <td><select id="select_Taak">
-              </select></td>
+            <td>
+              <select>
+                {taken.map((num) => (
+                  <option key={num.id}>{num.taak}</option>
+                ))}
+              </select>
+              </td>
           </tr>
         </tbody>
       </table>
