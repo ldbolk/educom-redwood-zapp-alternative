@@ -11,6 +11,20 @@ const DELETE_KLANT_MUTATION = gql`
     }
   }
 `
+// const newUser = await prisma.klant.create({
+//   data: {
+//     naam: 'wee',
+//     adres: 'e',
+//     postcode: 'e',
+//     woonplaats: 'lp',
+//     taken: {
+//       create: [
+//         { taak: 'Join the Prisma Slack on https://slack.prisma.io' }
+//       ]
+//     }
+//   }
+// })
+
 const MAX_STRING_LENGTH = 150
 
 const truncate = (text) => {
@@ -139,61 +153,7 @@ const Klant = ({ klant, taken }) => {
       <br/>
       <br/>
 
-      <div>Vaste taken:</div>
-      <br/>
-
-
-      <div className="rw-segment rw-table-wrapper-responsive">
-      <table className="rw-table">
-        <thead>
-          <tr>
-            <th>#</th>
-
-            <th>Taak</th>
-
-            <th>Extra</th>
-
-            <th>&nbsp;</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {klant.taken.map((taak) => (
-            <tr key={taak.id}>
-              <td>{truncate(taak.id)}</td>
-
-              <td>{truncate(taak.taak)}</td>
-
-              <td>{truncate(taak.extra)}</td>
-
-              <td>
-                <nav className="rw-table-actions">
-                  
-                  <button
-                    type="button"
-                    title={'Delete taak ' + taak.id}
-                    className="rw-button rw-button-small rw-button-red"
-                    onClick={() => onDeleteClick(taak.id)}
-                    >
-                    Delete
-                  </button>
-                </nav>
-              </td>
-            </tr>
-          ))}
-          <tr>
-            <td>nummer</td>
-            <td>
-              <select>
-                {taken.map((num) => (
-                  <option key={num.id}>{num.taak}</option>
-                ))}
-              </select>
-              </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+      
     </>
   )
 }

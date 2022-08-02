@@ -13,6 +13,12 @@ export const QUERY = gql`
       adres
       postcode
       woonplaats
+      taken{id, taak, extra}
+    }
+    taken: taaks {
+      id
+      taak
+      extra
     }
   }
 `
@@ -28,14 +34,24 @@ const UPDATE_KLANT_MUTATION = gql`
   }
 `
 
+const MAX_STRING_LENGTH = 150
+
+const truncate = (text) => {
+  let output = text
+  if (text && text.length > MAX_STRING_LENGTH) {
+    output = output.substring(0, MAX_STRING_LENGTH) + '...'
+  }
+  return output
+}
+
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }) => (
   <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({ klant }) => {
-  const [updateKlant, { loading, error }] = useMutation(UPDATE_KLANT_MUTATION, {
+export const Success = ({ klant, taken }) => {
+  const [updateKlant, { loading, error }, deleteTaak] = useMutation(UPDATE_KLANT_MUTATION, {
     onCompleted: () => {
       toast.success('Klant updated')
       navigate(routes.klanten())
@@ -47,6 +63,12 @@ export const Success = ({ klant }) => {
 
   const onSave = (input, id) => {
     updateKlant({ variables: { id, input } })
+  }
+
+  const onDeleteClick = (id) => {
+    if (confirm('Are you sure you want to delete taak ' + id + '?')) {
+      deleteTaak({ variables: { id, input } })
+    }
   }
 
   return (
@@ -63,8 +85,65 @@ export const Success = ({ klant }) => {
           onSave={onSave}
           error={error}
           loading={loading}
+          taken={taken}
         />
       </div>
+
+      <div>Vaste taken:</div>
+      <br/>
+
+
+      <div className="rw-segment rw-table-wrapper-responsive">
+      <table className="rw-table">
+        <thead>
+          <tr>
+            <th>#</th>
+
+            <th>Taak</th>
+
+            <th>Extra</th>
+
+            <th>&nbsp;</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {klant.taken.map((taak) => (
+            <tr key={taak.id}>
+              <td>{truncate(taak.id)}</td>
+
+              <td>{truncate(taak.taak)}</td>
+
+              <td>{truncate(taak.extra)}</td>
+
+              <td>
+                <nav className="rw-table-actions">
+                  
+                  <button
+                    type="button"
+                    title={'Delete taak ' + taak.id}
+                    className="rw-button rw-button-small rw-button-red"
+                    onClick={() => onDeleteClick(klant.id, taak)}
+                    >
+                    Delete
+                  </button>
+                </nav>
+              </td>
+            </tr>
+          ))}
+          <tr>
+            <td>nummer</td>
+            <td>
+              <select>
+                {taken.map((num) => (
+                  <option key={num.id}>{num.taak}</option>
+                ))}
+              </select>
+              </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     </div>
   )
 }
