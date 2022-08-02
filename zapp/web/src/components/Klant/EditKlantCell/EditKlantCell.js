@@ -71,11 +71,20 @@ export const Success = ({ klant, taken }) => {
     }
   }
 
+  // const updatedKlant = await prisma.klant.update({
+  //   where: { id: klant.id },
+  //   data: {
+  //     taken: {
+  //       connect: { taak: taken.taak, extra: taken.extra },
+  //     },
+  //   },
+  // })
+
   return (
     <div className="rw-segment">
       <header className="rw-segment-header">
         <h2 className="rw-heading rw-heading-secondary">
-          Edit Klant {klant.id}
+          Edit {klant.naam}
         </h2>
       </header>
 

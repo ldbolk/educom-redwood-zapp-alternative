@@ -25,6 +25,8 @@ const DELETE_KLANT_MUTATION = gql`
 //   }
 // })
 
+
+
 const MAX_STRING_LENGTH = 150
 
 const truncate = (text) => {
@@ -69,7 +71,6 @@ const checkboxInputTag = (checked) => {
 }
 
 const Klant = ({ klant, taken }) => {
-    console.log(taken)
     const [deleteKlant] = useMutation(DELETE_KLANT_MUTATION, {
       onCompleted: () => {
         toast.success('Klant deleted')
